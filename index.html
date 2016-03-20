@@ -24,6 +24,27 @@
           align-items: center;
         }
       }
+    </style>
+  </head>
+  <body>
+    <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
+    <div class="page page--main">
+      <span>Что делать, если заблокирован торрент?</span>
+      <h1>Получить magnet-ссылку из хэш-кода</h1>
+      <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
+      <form>
+        <input type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
+        <input type="submit" value="Получить">
+      </form>
+    </div>
+    <div class="page page--result">
+      <span>Надеюсь, вы используете сервис для обмена лицензионным контентом?</span>
+      <h1>Ваша magnet-ссылка сформирована</h1>
+      <div class="link-container"></div>
+      <a class="link link--magnet">Открыть</a>
+      <a class="link link--repeat" href="#">Ещё</a>
+    </div>
+    <style>
       html.error {
         background-color: #731D1D;
       }
@@ -141,25 +162,6 @@
         float: right;
       }
     </style>
-  </head>
-  <body>
-    <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
-    <div class="page page--main">
-      <span>Что делать, если заблокирован торрент?</span>
-      <h1>Получить magnet-ссылку из хэш-кода</h1>
-      <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
-      <form>
-        <input type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
-        <input type="submit" value="Получить">
-      </form>
-    </div>
-    <div class="page page--result">
-      <span>Надеюсь, вы используете сервис для обмена лицензионным контентом?</span>
-      <h1>Ваша magnet-ссылка сформирована</h1>
-      <div class="link-container"></div>
-      <a class="link link--magnet">Открыть</a>
-      <a class="link link--repeat" href="#">Ещё</a>
-    </div>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var pageMain = document.getElementsByClassName('page--main')[0];
