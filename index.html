@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Получить magnet-ссылку из хэш-кода">
+    <meta name="keywords" content="magnet,торрент,хэш-код">
+    <meta name="author" content="Дмитрий Яковлев">
+    <title>Hash 2 Magnet</title>
+    <style>
+      html {
+        height: 100vh;
+        margin: 0;
+        background-color: #0F4566;
+        color: #FFF;
+        font-family: sans-serif;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+      }
+      @media (min-width: 768px) {
+        html {
+          align-items: center;
+        }
+      }
+      html.error {
+        background-color: #731D1D;
+      }
+      html.success {
+        background-color: #0F4500;
+      }
+      body {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 90%;
+        max-width: 740px;
+      }
+      h1 {
+        text-transform: uppercase;
+        font-size: 32px;
+        font-weight: 600;
+        margin: 22px 0;
+      }
+      a {
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      input {
+        background: transparent;
+        border: 1px solid #FFF;
+        text-transform: uppercase;
+      }
+      ::-webkit-input-placeholder { color: #fff; opacity: 1 !important; }
+      :-moz-placeholder { color: #fff; }
+      ::-moz-placeholder { color: #fff; }
+      :-ms-input-placeholder { color: #fff; }
+      input[type="text"] {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        color: #fff;
+        width: 100%;
+        font-size: 18px;
+        outline: none;
+        padding-bottom: 7px;
+        margin-bottom: 14px;
+      }
+      input[type="submit"], a {
+        display: inline-block;
+        color: #fff;
+        margin: 14px auto;
+        cursor: pointer;
+        border: 1px solid #fff;
+        padding: 7px;
+      }
+      input[type="submit"]:hover,
+      input[type="submit"]:focus,
+      a:hover, a:focus {
+        background: #fff;
+        color: #0F4566;
+      }
+      .error input[type="submit"]:hover,
+      .error input[type="submit"]:focus {
+        color: #731D1D;
+      }
+      .success a:hover, .success a:focus {
+        color: #0F4500;
+      }
+      @-webkit-keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .page, .error-message {
+        display: none;
+        opacity: 0;
+        -webkit-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+      }
+      .page--active, .error-message--active {
+        display: block;
+        opacity: 1;
+      }
+      .error-message--active {
+        margin-bottom: 14px;
+        font-weight: 700;
+      }
+      .link-container {
+        border-bottom: 1px solid #fff;
+        width: 100%;
+        font-size: 18px;
+        padding-bottom: 7px;
+        margin-bottom: 14px;
+        word-wrap: break-word;
+        text-transform: uppercase;
+      }
+      .link--repeat {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
+    <div class="page page--main">
+      <span>Что делать, если заблокирован торрент?</span>
+      <h1>Получить magnet-ссылку из хэш-кода</h1>
+      <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
+      <form>
+        <input type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
+        <input type="submit" value="Получить">
+      </form>
+    </div>
+    <div class="page page--result">
+      <span>Надеюсь, вы используете сервис для обмена лицензионным контентом?</span>
+      <h1>Ваша magnet-ссылка сформирована</h1>
+      <div class="link-container"></div>
+      <a class="link link--magnet">Открыть</a>
+      <a class="link link--repeat" href="#">Ещё</a>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var pageMain = document.getElementsByClassName('page--main')[0];
+        var pageResult = document.getElementsByClassName('page--result')[0];
+        var html = document.getElementsByTagName('html')[0];
+        var form = document.forms[0];
+        var errorMsg = document.getElementsByClassName('error-message')[0];
+        pageMain.classList.toggle('page--active');
+        form.addEventListener('submit', function(e) {
+          var hash = document.getElementsByName('hash-code')[0].value.trim();          
+          e.preventDefault();
+          if (RegExp(/^([a-fA-F\d]{40})$/i).test(hash)) {
+            var url = 'magnet:?xt=urn:btih:' + hash;
+            html.classList.remove('error');
+            html.classList.add('success');
+            errorMsg.classList.remove('error-message--active');
+            document.getElementsByClassName('link-container')[0].innerHTML = url;
+            document.getElementsByClassName('link--magnet')[0].href= url;
+            pageMain.classList.remove('page--active');
+            pageResult.classList.add('page--active');
+          } else {
+            html.classList.add('error');
+            errorMsg.classList.add('error-message--active');
+          }
+        });
+        document.getElementsByClassName('link--repeat')[0].onclick = function(e) {
+          e.preventDefault();
+          html.classList.remove('success');
+          pageMain.classList.add('page--active');
+          pageResult.classList.remove('page--active');
+        }
+      });
+    </script>
+  </body>
+</html>
