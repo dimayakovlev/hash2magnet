@@ -73,6 +73,7 @@
         cursor: pointer;
         border: 1px solid #fff;
         padding: 7px;
+        text-align: center;
       }
       input[type="submit"]:hover,
       input[type="submit"]:focus,
@@ -109,6 +110,20 @@
       .error-message--active {
         margin-bottom: 14px;
         font-weight: 700;
+      }
+      .error-message--repeated {
+        opacity: 0;
+        -webkit-animation: fadeOut 0.5s;
+        animation: fadeOut 0.5s;
+      }
+      @-webkit-keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+
+      @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
       }
       .link-container {
         border-bottom: 1px solid #fff;
@@ -147,29 +162,33 @@
         var pageMain = document.getElementsByClassName('page--main')[0];
         var pageResult = document.getElementsByClassName('page--result')[0];
         var html = document.getElementsByTagName('html')[0];
-        var form = document.forms[0];
         var errorMsg = document.getElementsByClassName('error-message')[0];
         pageMain.classList.toggle('page--active');
-        form.addEventListener('submit', function(e) {
-          var hash = document.getElementsByName('hash-code')[0].value.trim();          
+        document.forms[0].addEventListener('submit', function(e) {
+          var hash = document.getElementsByName('hash-code')[0].value.trim();
           e.preventDefault();
           if (RegExp(/^([a-fA-F\d]{40})$/i).test(hash)) {
             var url = 'magnet:?xt=urn:btih:' + hash;
             html.classList.remove('error');
-            html.classList.add('success');
-            errorMsg.classList.remove('error-message--active');
+            html.classList.add('success');            
             document.getElementsByClassName('link-container')[0].innerHTML = url;
             document.getElementsByClassName('link--magnet')[0].href= url;
             pageMain.classList.remove('page--active');
             pageResult.classList.add('page--active');
           } else {
             html.classList.add('error');
-            errorMsg.classList.add('error-message--active');
+            if (errorMsg.classList.contains('error-message--active')) {
+              errorMsg.classList.add('error-message--repeated');
+              setTimeout(function() { errorMsg.classList.remove('error-message--repeated'); }, 500);
+            } else {
+              errorMsg.classList.add('error-message--active');
+            }
           }
         });
         document.getElementsByClassName('link--repeat')[0].onclick = function(e) {
           e.preventDefault();
           html.classList.remove('success');
+          errorMsg.classList.remove('error-message--active');
           pageMain.classList.add('page--active');
           pageResult.classList.remove('page--active');
         }
