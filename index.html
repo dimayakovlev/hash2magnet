@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Получить magnet-ссылку из хэш-кода">
+    <meta name="description" content="Получение magnet-ссылки для торрента по его хэш-коду">
     <meta name="keywords" content="magnet,торрент,хэш-код">
     <meta name="author" content="Дмитрий Яковлев">
+    <meta property="og:title" content="Hash 2 Magnet">
+    <meta property="og:description" content="Получение magnet-ссылки для торрента по его хэш-коду">
+    <meta property="og:type" content="website">
+    <meta property="og:image"  content="image.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@ComradeYakovlev" />
+    <meta name="twitter:creator" content="@ComradeYakovlev" />
     <title>Hash 2 Magnet</title>
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico">
@@ -33,7 +40,7 @@
         height: 100vh;
         margin: 0;
         background-color: #0F4566;
-        color: #FFF;
+        color: #fff;
         font-family: sans-serif;
         font-size: 14px;
         display: flex;
@@ -49,20 +56,15 @@
   <body>
     <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
     <div class="page page--main">
-      <span>Что делать, если заблокирован торрент?</span>
       <h1>Получить magnet-ссылку из хэш-кода</h1>
       <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
-      <form>
-        <input type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
-        <input type="submit" value="Получить">
-      </form>
+      <input class="data data--input" type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
+      <a class="link link--button link--submit" href="#">Получить</a>
     </div>
     <div class="page page--result">
-      <span>Надеюсь, вы используете сервис для обмена лицензионным контентом?</span>
       <h1>Ваша magnet-ссылка сформирована</h1>
-      <div class="link-container"></div>
-      <a class="link link--magnet">Открыть</a>
-      <a class="link link--repeat" href="#">Ещё</a>
+      <div class="data data--result"></div>
+      <a class="link link--button link--repeat" href="#">Ещё</a>
     </div>
     <style>
       html.error {
@@ -83,55 +85,55 @@
         font-weight: 600;
         margin: 22px 0;
       }
-      a {
+      .link {
+        color: #fff;
         text-decoration: none;
         text-transform: uppercase;
+        cursor: pointer;
       }
-      input {
-        background: transparent;
-        border: 1px solid #FFF;
+      .link--button {
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #fff;
+        padding: 7px;
+        text-align: center;
+        
+      }
+      .link--button:hover, .link--button:focus {
+        background: #fff;
+        color: #0F4566;
+      }
+      .error .link--button:hover, .error .link--button:focus {
+        color: #731D1D;
+      }
+      .success .link--button:hover, .success .link--button:focus {
+        color: #0F4500;
+      }      
+      .data {
+        border-bottom: 1px solid #fff;
+        color: #fff;
+        display: inline-block;
         text-transform: uppercase;
+        font-size: 18px;
+        padding-bottom: 7px;
+        margin-bottom: 14px;
+        width: 100%;
+      }      
+      .data--input {
+        background: transparent;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        outline: none;
+      }      
+      .data--result {
+        word-wrap: break-word;
       }
       ::-webkit-input-placeholder { color: #fff; opacity: 1 !important; }
       :-moz-placeholder { color: #fff; }
       ::-moz-placeholder { color: #fff; }
       :-ms-input-placeholder { color: #fff; }
-      input[type="text"] {
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        color: #fff;
-        width: 100%;
-        font-size: 18px;
-        outline: none;
-        padding-bottom: 7px;
-        margin-bottom: 14px;
-      }
-      input[type="submit"], a {
-        display: inline-block;
-        color: #fff;
-        margin: 14px auto;
-        cursor: pointer;
-        border: 1px solid #fff;
-        padding: 7px;
-        text-align: center;
-      }
-      input[type="submit"] {
-        width: 100%;
-      }
-      input[type="submit"]:hover,
-      input[type="submit"]:focus,
-      a:hover, a:focus {
-        background: #fff;
-        color: #0F4566;
-      }
-      .error input[type="submit"]:hover,
-      .error input[type="submit"]:focus {
-        color: #731D1D;
-      }
-      .success a:hover, .success a:focus {
-        color: #0F4500;
-      }
+      
       @-webkit-keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -169,18 +171,6 @@
         from { opacity: 1; }
         to { opacity: 0; }
       }
-      .link-container {
-        border-bottom: 1px solid #fff;
-        width: 100%;
-        font-size: 18px;
-        padding-bottom: 7px;
-        margin-bottom: 14px;
-        word-wrap: break-word;
-        text-transform: uppercase;
-      }
-      .link--repeat {
-        float: right;
-      }
     </style>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -189,15 +179,16 @@
         var html = document.getElementsByTagName('html')[0];
         var errorMsg = document.getElementsByClassName('error-message')[0];
         pageMain.classList.toggle('page--active');
-        document.forms[0].addEventListener('submit', function(e) {
+        document.getElementsByClassName('link--submit')[0].addEventListener('click', function(e) {          
           var hash = document.getElementsByName('hash-code')[0].value.trim();
           e.preventDefault();
           if (RegExp(/^([a-fA-F\d]{40})$/i).test(hash)) {
             var url = 'magnet:?xt=urn:btih:' + hash;
+            url = '<a class="link" href="' + url + '">' + url + '</a>';
             html.classList.remove('error');
             html.classList.add('success');            
-            document.getElementsByClassName('link-container')[0].innerHTML = url;
-            document.getElementsByClassName('link--magnet')[0].href= url;
+            document.getElementsByClassName('data--result')[0].innerHTML = url;
+            //document.getElementsByClassName('link--magnet')[0].href= url;
             pageMain.classList.remove('page--active');
             pageResult.classList.add('page--active');
           } else {
