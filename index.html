@@ -51,22 +51,6 @@
           align-items: center;
         }
       }
-    </style>
-  </head>
-  <body>
-    <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
-    <div class="page page--main">
-      <h1>Получить magnet-ссылку из хэш-кода</h1>
-      <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
-      <input class="data data--input" type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
-      <a class="link link--button link--submit" href="#">Получить</a>
-    </div>
-    <div class="page page--result">
-      <h1>Ваша magnet-ссылка сформирована</h1>
-      <div class="data data--result"></div>
-      <a class="link link--button link--repeat" href="#">Ещё</a>
-    </div>
-    <style>
       html.error {
         background-color: #731D1D;
       }
@@ -132,13 +116,11 @@
       ::-webkit-input-placeholder { color: #fff; opacity: 1 !important; }
       :-moz-placeholder { color: #fff; }
       ::-moz-placeholder { color: #fff; }
-      :-ms-input-placeholder { color: #fff; }
-      
+      :-ms-input-placeholder { color: #fff; }      
       @-webkit-keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
       }
-
       @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -166,12 +148,25 @@
         from { opacity: 1; }
         to { opacity: 0; }
       }
-
       @keyframes fadeOut {
         from { opacity: 1; }
         to { opacity: 0; }
       }
     </style>
+  </head>
+  <body>
+    <noscript>Для использования сервиса необходимо включить поддержку JavaScript!</noscript>
+    <div class="page page--main">
+      <h1>Получить magnet-ссылку из хэш-кода</h1>
+      <div class="error-message">Введённый хэш-код содержит ошибку! Проверьте правильность ввода и повторите попытку</div>
+      <input class="data data--input" type="text" name="hash-code" title="Хэш-код SHA1" placeholder="Хэш-код SHA1">
+      <a class="link link--button link--submit" href="#">Получить</a>
+    </div>
+    <div class="page page--result">
+      <h1>Ваша magnet-ссылка сформирована</h1>
+      <div class="data data--result"></div>
+      <a class="link link--button link--repeat" href="#">Ещё</a>
+    </div>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var pageMain = document.getElementsByClassName('page--main')[0];
@@ -179,16 +174,15 @@
         var html = document.getElementsByTagName('html')[0];
         var errorMsg = document.getElementsByClassName('error-message')[0];
         pageMain.classList.toggle('page--active');
-        document.getElementsByClassName('link--submit')[0].addEventListener('click', function(e) {          
+        document.getElementsByClassName('link--submit')[0].addEventListener('click', function(e) {
           var hash = document.getElementsByName('hash-code')[0].value.trim();
           e.preventDefault();
           if (RegExp(/^([a-fA-F\d]{40})$/i).test(hash)) {
             var url = 'magnet:?xt=urn:btih:' + hash;
             url = '<a class="link" href="' + url + '">' + url + '</a>';
             html.classList.remove('error');
-            html.classList.add('success');            
+            html.classList.add('success');
             document.getElementsByClassName('data--result')[0].innerHTML = url;
-            //document.getElementsByClassName('link--magnet')[0].href= url;
             pageMain.classList.remove('page--active');
             pageResult.classList.add('page--active');
           } else {
